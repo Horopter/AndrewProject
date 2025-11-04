@@ -22,7 +22,7 @@ const int MAX_FILENAME_LENGTH = 256;
 bool getIntInput(int &value)
 {
   cin >> value;
-  if (cin.fail())
+  if (cin.fail() || cin.eof())
   {
     cin.clear();
     cin.ignore(10000, '\n');
@@ -414,6 +414,10 @@ int main(int argc, char *argv[])
     if (!getIntInput(menuChoice))
     {
       cout << "Invalid data entered" << endl;
+      if (cin.eof())
+      {
+        break;
+      }
       continue;
     }
 
