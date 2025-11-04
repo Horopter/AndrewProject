@@ -298,7 +298,42 @@ void handleInsertOption(ColorImageClass &image)
   upperLeft.setRowCol(row, col);
 
   ColorClass transparencyColor;
-  getColorFromMenu(transparencyColor);
+  cout << "1. Red" << endl;
+  cout << "2. Green" << endl;
+  cout << "3. Blue" << endl;
+  cout << "4. Black" << endl;
+  cout << "5. White" << endl;
+  cout << "Enter int for transparecy color: ";
+  int choice;
+  if (!getIntInput(choice))
+  {
+    choice = 1;
+  }
+
+  if (choice == 1)
+  {
+    transparencyColor.setToRed();
+  }
+  else if (choice == 2)
+  {
+    transparencyColor.setToGreen();
+  }
+  else if (choice == 3)
+  {
+    transparencyColor.setToBlue();
+  }
+  else if (choice == 4)
+  {
+    transparencyColor.setToBlack();
+  }
+  else if (choice == 5)
+  {
+    transparencyColor.setToWhite();
+  }
+  else
+  {
+    transparencyColor.setToRed();
+  }
 
   ColorImageClass sourceImage;
   if (!sourceImage.readFromPpmFile(insertFileName))
