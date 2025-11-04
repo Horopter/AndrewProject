@@ -1,0 +1,22 @@
+# Build artifacts
+build/
+*.o
+*.exe
+
+# Python virtual environment
+pdf_env/
+
+# Test output files
+src/test_*.ppm
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+

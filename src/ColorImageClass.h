@@ -1,0 +1,66 @@
+/*
+ * ColorImageClass.h
+ * 
+ * Programmer: Anjali Aurora
+ * Date: November 2025
+ * 
+ * Purpose: Defines the ColorImageClass which represents an image using
+ *          a 2D array of ColorClass objects with dynamic allocation.
+ */
+
+#ifndef COLORIMAGECLASS_H
+#define COLORIMAGECLASS_H
+
+#include "ColorClass.h"
+#include "RowColumnLocationClass.h"
+
+class ColorImageClass
+{
+  private:
+    int width;
+    int height;
+    int maxColorValue;
+    ColorClass **pixels;
+
+    // Helper function to allocate pixel array
+    void allocatePixels(int inWidth, int inHeight);
+
+    // Helper function to deallocate pixel array
+    void deallocatePixels();
+
+  public:
+    // Default constructor
+    ColorImageClass();
+
+    // Constructor with dimensions
+    ColorImageClass(int inWidth, int inHeight, int inMaxColor);
+
+    // Copy constructor
+    ColorImageClass(const ColorImageClass &rhs);
+
+    // Destructor
+    ~ColorImageClass();
+
+    // Assignment operator
+    ColorImageClass& operator=(const ColorImageClass &rhs);
+
+    // Getters
+    int getWidth() const;
+    int getHeight() const;
+    int getMaxColorValue() const;
+
+    // Get pixel color at location
+    bool getPixel(int row, int col, ColorClass &outColor) const;
+
+    // Set pixel color at location
+    bool setPixel(int row, int col, const ColorClass &inColor);
+
+    // Initialize image to a single color
+    void initializeTo(const ColorClass &inColor);
+
+    // Check if location is valid
+    bool isValidLocation(int row, int col) const;
+};
+
+#endif
+
