@@ -11,6 +11,8 @@
 #ifndef COLORCLASS_H
 #define COLORCLASS_H
 
+#include "Constants.h"
+
 class ColorClass
 {
   private:
@@ -19,10 +21,6 @@ class ColorClass
     int blueValue;
 
   public:
-    // Inclusive bounds for color components
-    static const int COLOR_MIN = 0;
-    static const int COLOR_MAX = 255;
-
     // Default constructor (sets to black)
     ColorClass();
 

@@ -9,6 +9,7 @@
  */
 
 #include "ColorImageClass.h"
+#include "Constants.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -185,7 +186,7 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
   int inWidth, inHeight, inMaxColorValue;
   inFile >> inWidth >> inHeight >> inMaxColorValue;
   // Validate width, height, and max color value
-  if (inFile.fail() || inWidth <= 0 || inHeight <= 0 || 
+  if (inFile.fail() || inWidth < MIN_IMAGE_DIM || inHeight < MIN_IMAGE_DIM ||
       inMaxColorValue <= 0)
   {
     inFile.close();

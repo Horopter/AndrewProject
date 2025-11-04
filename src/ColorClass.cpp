@@ -9,50 +9,50 @@
 
 #include "ColorClass.h"
 
-// Uses ColorClass::COLOR_MIN and ColorClass::COLOR_MAX from header
+// Uses MIN_COLOR_VALUE and MAX_COLOR_VALUE from Constants.h
 
 ColorClass::ColorClass()
 {
-  redValue = ColorClass::COLOR_MIN;
-  greenValue = ColorClass::COLOR_MIN;
-  blueValue = ColorClass::COLOR_MIN;
+  redValue = MIN_COLOR_VALUE;
+  greenValue = MIN_COLOR_VALUE;
+  blueValue = MIN_COLOR_VALUE;
 }
 
 ColorClass::ColorClass(int inRed, int inGreen, int inBlue)
 {
-  if (inRed < ColorClass::COLOR_MIN)
+  if (inRed < MIN_COLOR_VALUE)
   {
-    redValue = ColorClass::COLOR_MIN;
+    redValue = MIN_COLOR_VALUE;
   }
-  else if (inRed > ColorClass::COLOR_MAX)
+  else if (inRed > MAX_COLOR_VALUE)
   {
-    redValue = ColorClass::COLOR_MAX;
+    redValue = MAX_COLOR_VALUE;
   }
   else
   {
     redValue = inRed;
   }
 
-  if (inGreen < ColorClass::COLOR_MIN)
+  if (inGreen < MIN_COLOR_VALUE)
   {
-    greenValue = ColorClass::COLOR_MIN;
+    greenValue = MIN_COLOR_VALUE;
   }
-  else if (inGreen > ColorClass::COLOR_MAX)
+  else if (inGreen > MAX_COLOR_VALUE)
   {
-    greenValue = ColorClass::COLOR_MAX;
+    greenValue = MAX_COLOR_VALUE;
   }
   else
   {
     greenValue = inGreen;
   }
 
-  if (inBlue < ColorClass::COLOR_MIN)
+  if (inBlue < MIN_COLOR_VALUE)
   {
-    blueValue = ColorClass::COLOR_MIN;
+    blueValue = MIN_COLOR_VALUE;
   }
-  else if (inBlue > ColorClass::COLOR_MAX)
+  else if (inBlue > MAX_COLOR_VALUE)
   {
-    blueValue = ColorClass::COLOR_MAX;
+    blueValue = MAX_COLOR_VALUE;
   }
   else
   {
@@ -62,74 +62,74 @@ ColorClass::ColorClass(int inRed, int inGreen, int inBlue)
 
 void ColorClass::setToBlack()
 {
-  redValue = ColorClass::COLOR_MIN;
-  greenValue = ColorClass::COLOR_MIN;
-  blueValue = ColorClass::COLOR_MIN;
+  redValue = MIN_COLOR_VALUE;
+  greenValue = MIN_COLOR_VALUE;
+  blueValue = MIN_COLOR_VALUE;
 }
 
 void ColorClass::setToRed()
 {
-  redValue = ColorClass::COLOR_MAX;
-  greenValue = ColorClass::COLOR_MIN;
-  blueValue = ColorClass::COLOR_MIN;
+  redValue = MAX_COLOR_VALUE;
+  greenValue = MIN_COLOR_VALUE;
+  blueValue = MIN_COLOR_VALUE;
 }
 
 void ColorClass::setToGreen()
 {
-  redValue = ColorClass::COLOR_MIN;
-  greenValue = ColorClass::COLOR_MAX;
-  blueValue = ColorClass::COLOR_MIN;
+  redValue = MIN_COLOR_VALUE;
+  greenValue = MAX_COLOR_VALUE;
+  blueValue = MIN_COLOR_VALUE;
 }
 
 void ColorClass::setToBlue()
 {
-  redValue = ColorClass::COLOR_MIN;
-  greenValue = ColorClass::COLOR_MIN;
-  blueValue = ColorClass::COLOR_MAX;
+  redValue = MIN_COLOR_VALUE;
+  greenValue = MIN_COLOR_VALUE;
+  blueValue = MAX_COLOR_VALUE;
 }
 
 void ColorClass::setToWhite()
 {
-  redValue = ColorClass::COLOR_MAX;
-  greenValue = ColorClass::COLOR_MAX;
-  blueValue = ColorClass::COLOR_MAX;
+  redValue = MAX_COLOR_VALUE;
+  greenValue = MAX_COLOR_VALUE;
+  blueValue = MAX_COLOR_VALUE;
 }
 
 void ColorClass::setToSpecificColor(int inRed, int inGreen, int inBlue)
 {
-  if (inRed < ColorClass::COLOR_MIN)
+  if (inRed < MIN_COLOR_VALUE)
   {
-    redValue = ColorClass::COLOR_MIN;
+    redValue = MIN_COLOR_VALUE;
   }
-  else if (inRed > ColorClass::COLOR_MAX)
+  else if (inRed > MAX_COLOR_VALUE)
   {
-    redValue = ColorClass::COLOR_MAX;
+    redValue = MAX_COLOR_VALUE;
   }
   else
   {
     redValue = inRed;
   }
 
-  if (inGreen < ColorClass::COLOR_MIN)
+  if (inGreen < MIN_COLOR_VALUE)
   {
-    greenValue = ColorClass::COLOR_MIN;
+    greenValue = MIN_COLOR_VALUE;
   }
-  else if (inGreen > ColorClass::COLOR_MAX)
+  else if (inGreen > MAX_COLOR_VALUE)
   {
-    greenValue = ColorClass::COLOR_MAX;
+    greenValue = MAX_COLOR_VALUE;
   }
   else
   {
     greenValue = inGreen;
   }
 
-  if (inBlue < ColorClass::COLOR_MIN)
+  if (inBlue < MIN_COLOR_VALUE)
   {
-    blueValue = ColorClass::COLOR_MIN;
+    blueValue = MIN_COLOR_VALUE;
   }
-  else if (inBlue > ColorClass::COLOR_MAX)
+  else if (inBlue > MAX_COLOR_VALUE)
   {
-    blueValue = ColorClass::COLOR_MAX;
+    blueValue = MAX_COLOR_VALUE;
   }
   else
   {
