@@ -1,14 +1,18 @@
 /*
  * ColorImageClass.cpp
  * 
- * Programmer: Anjali Aurora
+ * Programmer: Anjali Arora
  * Date: November 2025
  * 
- * Purpose: Implements the ColorImageClass which represents an image
- *          using a 2D array of ColorClass objects with dynamic allocation.
+ * Purpose: Implements the ColorImageClass for managing images with
+ *          dynamic allocation.
  */
 
 #include "ColorImageClass.h"
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
 
 ColorImageClass::ColorImageClass()
 {
@@ -23,24 +27,19 @@ ColorImageClass::ColorImageClass(int inWidth, int inHeight, int inMaxColor)
   width = inWidth;
   height = inHeight;
   maxColorValue = inMaxColor;
-  allocatePixels(inWidth, inHeight);
+  pixels = 0;
+  allocatePixels(width, height);
+  ColorClass black;
+  initializeTo(black);
 }
 
 ColorImageClass::ColorImageClass(const ColorImageClass &rhs)
 {
-  width = rhs.width;
-  height = rhs.height;
-  maxColorValue = rhs.maxColorValue;
-  allocatePixels(width, height);
-
-  // Copy all pixels
-  for (int i = 0; i < height; i++)
-  {
-    for (int j = 0; j < width; j++)
-    {
-      pixels[i][j] = rhs.pixels[i][j];
-    }
-  }
+  width = 0;
+  height = 0;
+  maxColorValue = 255;
+  pixels = 0;
+  *this = rhs;
 }
 
 ColorImageClass::~ColorImageClass()
@@ -56,14 +55,15 @@ ColorImageClass& ColorImageClass::operator=(const ColorImageClass &rhs)
     width = rhs.width;
     height = rhs.height;
     maxColorValue = rhs.maxColorValue;
-    allocatePixels(width, height);
-
-    // Copy all pixels
-    for (int i = 0; i < height; i++)
+    if (rhs.pixels != 0)
     {
-      for (int j = 0; j < width; j++)
+      allocatePixels(width, height);
+      for (int i = 0; i < height; i++)
       {
-        pixels[i][j] = rhs.pixels[i][j];
+        for (int j = 0; j < width; j++)
+        {
+          pixels[i][j] = rhs.pixels[i][j];
+        }
       }
     }
   }
@@ -115,22 +115,22 @@ int ColorImageClass::getMaxColorValue() const
 
 bool ColorImageClass::getPixel(int row, int col, ColorClass &outColor) const
 {
-  if (isValidLocation(row, col))
+  if (!isValidLocation(row, col))
   {
-    outColor = pixels[row][col];
-    return true;
+    return false;
   }
-  return false;
+  outColor = pixels[row][col];
+  return true;
 }
 
 bool ColorImageClass::setPixel(int row, int col, const ColorClass &inColor)
 {
-  if (isValidLocation(row, col))
+  if (!isValidLocation(row, col))
   {
-    pixels[row][col] = inColor;
-    return true;
+    return false;
   }
-  return false;
+  pixels[row][col] = inColor;
+  return true;
 }
 
 void ColorImageClass::initializeTo(const ColorClass &inColor)
@@ -146,6 +146,143 @@ void ColorImageClass::initializeTo(const ColorClass &inColor)
 
 bool ColorImageClass::isValidLocation(int row, int col) const
 {
-  return (row >= 0 && row < height && col >= 0 && col < width);
+  if (pixels == 0)
+  {
+    return false;
+  }
+  if (row < 0 || row >= height || col < 0 || col >= width)
+  {
+    return false;
+  }
+  return true;
+}
+
+bool ColorImageClass::readFromPpmFile(const char *fileName)
+{
+  ifstream inFile;
+  inFile.open(fileName);
+
+  if (inFile.fail())
+  {
+    inFile.close();
+    cout << "Error: Unable to open PPM file: " << fileName << endl;
+    return false;
+  }
+
+  const int MAX_LINE_LENGTH = 80;
+  const char PPM_MAGIC_NUMBER[] = "P3";
+  char magicNumber[MAX_LINE_LENGTH];
+  inFile >> magicNumber;
+  if (strcmp(magicNumber, PPM_MAGIC_NUMBER) != 0)
+  {
+    inFile.close();
+    cout << "Error: Invalid PPM magic number in file: " << fileName 
+         << endl;
+    return false;
+  }
+
+  int inWidth, inHeight, inMaxColorValue;
+  inFile >> inWidth >> inHeight >> inMaxColorValue;
+  if (inFile.fail() || inWidth <= 0 || inHeight <= 0 || 
+      inMaxColorValue <= 0)
+  {
+    inFile.close();
+    cout << "Error: Invalid image dimensions or max color value in file: " 
+         << fileName << endl;
+    return false;
+  }
+
+  deallocatePixels();
+  width = inWidth;
+  height = inHeight;
+  maxColorValue = inMaxColorValue;
+  allocatePixels(width, height);
+
+  for (int i = 0; i < height; i++)
+  {
+    for (int j = 0; j < width; j++)
+    {
+      int red, green, blue;
+      inFile >> red >> green >> blue;
+      if (inFile.fail() || red < 0 || red > maxColorValue ||
+          green < 0 || green > maxColorValue ||
+          blue < 0 || blue > maxColorValue)
+      {
+        inFile.close();
+        cout << "Error: Invalid pixel data in file: " << fileName << endl;
+        return false;
+      }
+      ColorClass pixelColor(red, green, blue);
+      setPixel(i, j, pixelColor);
+    }
+  }
+
+  inFile.close();
+  return true;
+}
+
+bool ColorImageClass::writeToPpmFile(const char *fileName) const
+{
+  ofstream outFile;
+  outFile.open(fileName);
+
+  if (outFile.fail())
+  {
+    outFile.close();
+    cout << "Error: Unable to create PPM file: " << fileName << endl;
+    return false;
+  }
+
+  const char PPM_MAGIC_NUMBER[] = "P3";
+  outFile << PPM_MAGIC_NUMBER << endl;
+  outFile << width << " " << height << endl;
+  outFile << maxColorValue << endl;
+
+  for (int i = 0; i < height; i++)
+  {
+    for (int j = 0; j < width; j++)
+    {
+      ColorClass pixelColor;
+      getPixel(i, j, pixelColor);
+      outFile << pixelColor.getRed() << " " << pixelColor.getGreen() 
+              << " " << pixelColor.getBlue() << " ";
+    }
+    outFile << endl;
+  }
+
+  outFile.close();
+  return true;
+}
+
+bool ColorImageClass::insertImage(
+    const ColorImageClass &sourceImage,
+    const RowColumnClass &upperLeft,
+    const ColorClass &transparencyColor)
+{
+  int startRow = upperLeft.getRow();
+  int startCol = upperLeft.getCol();
+
+  for (int i = 0; i < sourceImage.getHeight(); i++)
+  {
+    for (int j = 0; j < sourceImage.getWidth(); j++)
+    {
+      ColorClass sourcePixel;
+      sourceImage.getPixel(i, j, sourcePixel);
+
+      if (sourcePixel.getRed() != transparencyColor.getRed() ||
+          sourcePixel.getGreen() != transparencyColor.getGreen() ||
+          sourcePixel.getBlue() != transparencyColor.getBlue())
+      {
+        int targetRow = startRow + i;
+        int targetCol = startCol + j;
+        if (isValidLocation(targetRow, targetCol))
+        {
+          setPixel(targetRow, targetCol, sourcePixel);
+        }
+      }
+    }
+  }
+
+  return true;
 }
 

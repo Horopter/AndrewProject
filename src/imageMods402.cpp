@@ -1,28 +1,87 @@
 /*
  * imageMods402.cpp
  * 
- * Programmer: Anjali Aurora
+ * Programmer: Anjali Arora
  * Date: November 2025
  * 
  * Purpose: Main program for EECS402 Project 3. Provides a menu-driven
- *          interface for modifying PPM images by drawing rectangles,
- *          patterns, and inserting other images.
+ *          interface for modifying PPM images.
  */
 
 #include <iostream>
 #include <cstring>
 #include "ColorImageClass.h"
 #include "ColorClass.h"
-#include "RowColumnLocationClass.h"
-#include "readPpmFile.h"
-#include "writePpmFile.h"
-#include "drawRectangle.h"
-#include "drawPattern.h"
-#include "insertImage.h"
-#include "getMenuChoice.h"
+#include "RowColumnClass.h"
+#include "RectangleClass.h"
+#include "PatternClass.h"
 using namespace std;
 
 const int MAX_FILENAME_LENGTH = 256;
+
+bool getIntInput(int &value)
+{
+  cin >> value;
+  if (cin.fail())
+  {
+    cin.clear();
+    cin.ignore(10000, '\n');
+    return false;
+  }
+  return true;
+}
+
+bool getStringInput(char *str, int maxLength)
+{
+  cin >> str;
+  if (cin.fail())
+  {
+    cin.clear();
+    cin.ignore(10000, '\n');
+    return false;
+  }
+  return true;
+}
+
+void getColorFromMenu(ColorClass &color)
+{
+  cout << "1. Red" << endl;
+  cout << "2. Green" << endl;
+  cout << "3. Blue" << endl;
+  cout << "4. Black" << endl;
+  cout << "5. White" << endl;
+  cout << "Enter int for color choice: ";
+  int choice;
+  if (!getIntInput(choice))
+  {
+    choice = 1;
+  }
+
+  if (choice == 1)
+  {
+    color.setToRed();
+  }
+  else if (choice == 2)
+  {
+    color.setToGreen();
+  }
+  else if (choice == 3)
+  {
+    color.setToBlue();
+  }
+  else if (choice == 4)
+  {
+    color.setToBlack();
+  }
+  else if (choice == 5)
+  {
+    color.setToWhite();
+  }
+  else
+  {
+    color.setToRed();
+  }
+}
 
 void displayMainMenu()
 {
@@ -50,9 +109,9 @@ void handleRectangleOption(ColorImageClass &image)
     return;
   }
 
-  RowColumnLocationClass upperLeft;
-  RowColumnLocationClass lowerRight;
-  RowColumnLocationClass center;
+  RowColumnClass upperLeft;
+  RowColumnClass lowerRight;
+  RowColumnClass center;
   int numRows;
   int numCols;
   int halfRows;
@@ -93,7 +152,8 @@ void handleRectangleOption(ColorImageClass &image)
     }
     fill = (fillChoice == 2);
 
-    drawRectangleCorners(image, upperLeft, lowerRight, color, fill);
+    RectangleClass rectangle(upperLeft, lowerRight, color, fill);
+    rectangle.drawOntoImage(image);
   }
   else if (methodChoice == 2)
   {
@@ -133,7 +193,10 @@ void handleRectangleOption(ColorImageClass &image)
     }
     fill = (fillChoice == 2);
 
-    drawRectangleDimensions(image, upperLeft, numRows, numCols, color, fill);
+    RowColumnClass lowerRight(upperLeft.getRow() + numRows - 1,
+                              upperLeft.getCol() + numCols - 1);
+    RectangleClass rectangle(upperLeft, lowerRight, color, fill);
+    rectangle.drawOntoImage(image);
   }
   else if (methodChoice == 3)
   {
@@ -173,7 +236,12 @@ void handleRectangleOption(ColorImageClass &image)
     }
     fill = (fillChoice == 2);
 
-    drawRectangleCenter(image, center, halfRows, halfCols, color, fill);
+    RowColumnClass upperLeft(center.getRow() - halfRows,
+                            center.getCol() - halfCols);
+    RowColumnClass lowerRight(center.getRow() + halfRows,
+                              center.getCol() + halfCols);
+    RectangleClass rectangle(upperLeft, lowerRight, color, fill);
+    rectangle.drawOntoImage(image);
   }
 }
 
@@ -187,7 +255,7 @@ void handlePatternOption(ColorImageClass &image)
     return;
   }
 
-  RowColumnLocationClass upperLeft;
+  RowColumnClass upperLeft;
   cout << "Enter upper left corner of pattern row and column: ";
   int row, col;
   if (!getIntInput(row) || !getIntInput(col))
@@ -200,11 +268,13 @@ void handlePatternOption(ColorImageClass &image)
   ColorClass color;
   getColorFromMenu(color);
 
-  if (!drawPattern(image, patternFileName, upperLeft, color))
+  PatternClass pattern;
+  if (!pattern.readPatternFromFile(patternFileName))
   {
-    cout << "Error: Unable to open pattern file: " << patternFileName
-         << endl;
+    return;
   }
+
+  pattern.drawOntoImage(image, upperLeft, color);
 }
 
 void handleInsertOption(ColorImageClass &image)
@@ -217,7 +287,7 @@ void handleInsertOption(ColorImageClass &image)
     return;
   }
 
-  RowColumnLocationClass upperLeft;
+  RowColumnClass upperLeft;
   cout << "Enter upper left corner to insert image row and column: ";
   int row, col;
   if (!getIntInput(row) || !getIntInput(col))
@@ -230,11 +300,15 @@ void handleInsertOption(ColorImageClass &image)
   ColorClass transparencyColor;
   getColorFromMenu(transparencyColor);
 
-  if (!insertImage(image, insertFileName, upperLeft, transparencyColor))
+  ColorImageClass sourceImage;
+  if (!sourceImage.readFromPpmFile(insertFileName))
   {
-    cout << "Error: Unable to open image file: " << insertFileName
+    cout << "Error: Unable to open image file: " << insertFileName 
          << endl;
+    return;
   }
+
+  image.insertImage(sourceImage, upperLeft, transparencyColor);
 }
 
 void handleWriteOption(ColorImageClass &image)
@@ -247,7 +321,7 @@ void handleWriteOption(ColorImageClass &image)
     return;
   }
 
-  if (!writePpmFile(outputFileName, image))
+  if (!image.writeToPpmFile(outputFileName))
   {
     cout << "Error: Unable to write file: " << outputFileName << endl;
   }
@@ -262,7 +336,7 @@ int main(int argc, char *argv[])
   }
 
   ColorImageClass image;
-  if (!readPpmFile(argv[1], image))
+  if (!image.readFromPpmFile(argv[1]))
   {
     cout << "Error: Unable to read input file: " << argv[1] << endl;
     return 1;

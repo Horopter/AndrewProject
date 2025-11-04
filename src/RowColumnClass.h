@@ -1,17 +1,17 @@
 /*
- * RowColumnLocationClass.h
+ * RowColumnClass.h
  * 
- * Programmer: Anjali Aurora
+ * Programmer: Anjali Arora
  * Date: November 2025
  * 
- * Purpose: Defines the RowColumnLocationClass which represents a
+ * Purpose: Defines the RowColumnClass which represents a
  *          location in an image using row and column coordinates.
  */
 
-#ifndef ROWCOLUMNLOCATIONCLASS_H
-#define ROWCOLUMNLOCATIONCLASS_H
+#ifndef ROWCOLUMNCLASS_H
+#define ROWCOLUMNCLASS_H
 
-class RowColumnLocationClass
+class RowColumnClass
 {
   private:
     int row;
@@ -19,10 +19,10 @@ class RowColumnLocationClass
 
   public:
     // Default constructor
-    RowColumnLocationClass();
+    RowColumnClass();
 
     // Constructor with row and column
-    RowColumnLocationClass(int inRow, int inCol);
+    RowColumnClass(int inRow, int inCol);
 
     // Getters
     int getRow() const;

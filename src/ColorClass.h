@@ -1,7 +1,7 @@
 /*
  * ColorClass.h
  * 
- * Programmer: Anjali Aurora
+ * Programmer: Anjali Arora
  * Date: November 2025
  * 
  * Purpose: Defines the ColorClass which represents a color using
@@ -14,39 +14,43 @@
 class ColorClass
 {
   private:
-    int red;
-    int green;
-    int blue;
+    int redValue;
+    int greenValue;
+    int blueValue;
 
   public:
-    // Default constructor - sets to black
+    // Default constructor (sets to black)
     ColorClass();
 
-    // Constructor with RGB values
+    // Value constructor with RGB values
     ColorClass(int inRed, int inGreen, int inBlue);
 
-    // Getters
-    int getRed() const;
-    int getGreen() const;
-    int getBlue() const;
-
-    // Setters
-    void setRed(int inRed);
-    void setGreen(int inGreen);
-    void setBlue(int inBlue);
-
-    // Set all RGB values at once
-    void setTo(int inRed, int inGreen, int inBlue);
-
-    // Set to predefined colors
-    void setToRed();
-    void setToGreen();
-    void setToBlue();
+    // Set the color to black
     void setToBlack();
+
+    // Set the color to red
+    void setToRed();
+
+    // Set the color to green
+    void setToGreen();
+
+    // Set the color to blue
+    void setToBlue();
+
+    // Set the color to white
     void setToWhite();
 
-    // Check if two colors are equal
-    bool equals(const ColorClass &rhs) const;
+    // Set the color to a specific RGB value
+    void setToSpecificColor(int inRed, int inGreen, int inBlue);
+
+    // Get the red component of the color
+    int getRed() const;
+
+    // Get the green component of the color
+    int getGreen() const;
+
+    // Get the blue component of the color
+    int getBlue() const;
 };
 
 #endif

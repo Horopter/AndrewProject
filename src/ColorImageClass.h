@@ -1,7 +1,7 @@
 /*
  * ColorImageClass.h
  * 
- * Programmer: Anjali Aurora
+ * Programmer: Anjali Arora
  * Date: November 2025
  * 
  * Purpose: Defines the ColorImageClass which represents an image using
@@ -12,7 +12,7 @@
 #define COLORIMAGECLASS_H
 
 #include "ColorClass.h"
-#include "RowColumnLocationClass.h"
+#include "RowColumnClass.h"
 
 class ColorImageClass
 {
@@ -60,6 +60,18 @@ class ColorImageClass
 
     // Check if location is valid
     bool isValidLocation(int row, int col) const;
+
+    // Read image from PPM file
+    bool readFromPpmFile(const char *fileName);
+
+    // Write image to PPM file
+    bool writeToPpmFile(const char *fileName) const;
+
+    // Insert another image with transparency
+    bool insertImage(
+        const ColorImageClass &sourceImage,
+        const RowColumnClass &upperLeft,
+        const ColorClass &transparencyColor);
 };
 
 #endif

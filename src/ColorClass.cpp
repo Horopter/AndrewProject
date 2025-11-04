@@ -1,11 +1,10 @@
 /*
  * ColorClass.cpp
  * 
- * Programmer: Anjali Aurora
+ * Programmer: Anjali Arora
  * Date: November 2025
  * 
- * Purpose: Implements the ColorClass which represents a color using
- *          RGB values.
+ * Purpose: Implements the ColorClass for representing RGB colors.
  */
 
 #include "ColorClass.h"
@@ -15,92 +14,142 @@ const int COLOR_MAX = 255;
 
 ColorClass::ColorClass()
 {
-  red = COLOR_MIN;
-  green = COLOR_MIN;
-  blue = COLOR_MIN;
+  redValue = COLOR_MIN;
+  greenValue = COLOR_MIN;
+  blueValue = COLOR_MIN;
 }
 
 ColorClass::ColorClass(int inRed, int inGreen, int inBlue)
 {
-  red = inRed;
-  green = inGreen;
-  blue = inBlue;
-}
+  if (inRed < COLOR_MIN)
+  {
+    redValue = COLOR_MIN;
+  }
+  else if (inRed > COLOR_MAX)
+  {
+    redValue = COLOR_MAX;
+  }
+  else
+  {
+    redValue = inRed;
+  }
 
-int ColorClass::getRed() const
-{
-  return red;
-}
+  if (inGreen < COLOR_MIN)
+  {
+    greenValue = COLOR_MIN;
+  }
+  else if (inGreen > COLOR_MAX)
+  {
+    greenValue = COLOR_MAX;
+  }
+  else
+  {
+    greenValue = inGreen;
+  }
 
-int ColorClass::getGreen() const
-{
-  return green;
-}
-
-int ColorClass::getBlue() const
-{
-  return blue;
-}
-
-void ColorClass::setRed(int inRed)
-{
-  red = inRed;
-}
-
-void ColorClass::setGreen(int inGreen)
-{
-  green = inGreen;
-}
-
-void ColorClass::setBlue(int inBlue)
-{
-  blue = inBlue;
-}
-
-void ColorClass::setTo(int inRed, int inGreen, int inBlue)
-{
-  red = inRed;
-  green = inGreen;
-  blue = inBlue;
-}
-
-void ColorClass::setToRed()
-{
-  red = COLOR_MAX;
-  green = COLOR_MIN;
-  blue = COLOR_MIN;
-}
-
-void ColorClass::setToGreen()
-{
-  red = COLOR_MIN;
-  green = COLOR_MAX;
-  blue = COLOR_MIN;
-}
-
-void ColorClass::setToBlue()
-{
-  red = COLOR_MIN;
-  green = COLOR_MIN;
-  blue = COLOR_MAX;
+  if (inBlue < COLOR_MIN)
+  {
+    blueValue = COLOR_MIN;
+  }
+  else if (inBlue > COLOR_MAX)
+  {
+    blueValue = COLOR_MAX;
+  }
+  else
+  {
+    blueValue = inBlue;
+  }
 }
 
 void ColorClass::setToBlack()
 {
-  red = COLOR_MIN;
-  green = COLOR_MIN;
-  blue = COLOR_MIN;
+  redValue = COLOR_MIN;
+  greenValue = COLOR_MIN;
+  blueValue = COLOR_MIN;
+}
+
+void ColorClass::setToRed()
+{
+  redValue = COLOR_MAX;
+  greenValue = COLOR_MIN;
+  blueValue = COLOR_MIN;
+}
+
+void ColorClass::setToGreen()
+{
+  redValue = COLOR_MIN;
+  greenValue = COLOR_MAX;
+  blueValue = COLOR_MIN;
+}
+
+void ColorClass::setToBlue()
+{
+  redValue = COLOR_MIN;
+  greenValue = COLOR_MIN;
+  blueValue = COLOR_MAX;
 }
 
 void ColorClass::setToWhite()
 {
-  red = COLOR_MAX;
-  green = COLOR_MAX;
-  blue = COLOR_MAX;
+  redValue = COLOR_MAX;
+  greenValue = COLOR_MAX;
+  blueValue = COLOR_MAX;
 }
 
-bool ColorClass::equals(const ColorClass &rhs) const
+void ColorClass::setToSpecificColor(int inRed, int inGreen, int inBlue)
 {
-  return (red == rhs.red && green == rhs.green && blue == rhs.blue);
+  if (inRed < COLOR_MIN)
+  {
+    redValue = COLOR_MIN;
+  }
+  else if (inRed > COLOR_MAX)
+  {
+    redValue = COLOR_MAX;
+  }
+  else
+  {
+    redValue = inRed;
+  }
+
+  if (inGreen < COLOR_MIN)
+  {
+    greenValue = COLOR_MIN;
+  }
+  else if (inGreen > COLOR_MAX)
+  {
+    greenValue = COLOR_MAX;
+  }
+  else
+  {
+    greenValue = inGreen;
+  }
+
+  if (inBlue < COLOR_MIN)
+  {
+    blueValue = COLOR_MIN;
+  }
+  else if (inBlue > COLOR_MAX)
+  {
+    blueValue = COLOR_MAX;
+  }
+  else
+  {
+    blueValue = inBlue;
+  }
+}
+
+int ColorClass::getRed() const
+{
+  return redValue;
+}
+
+int ColorClass::getGreen() const
+{
+  return greenValue;
+}
+
+int ColorClass::getBlue() const
+{
+  return blueValue;
 }
 
