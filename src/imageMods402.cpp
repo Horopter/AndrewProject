@@ -123,7 +123,12 @@ void handleRectangleOption(ColorImageClass &image)
   {
     cout << "Enter upper left corner row and column: ";
     int row1, col1;
-    if (!getIntInput(row1) || !getIntInput(col1))
+    if (!getIntInput(row1))
+    {
+      cout << "Invalid data entered" << endl;
+      return;
+    }
+    if (!getIntInput(col1))
     {
       cout << "Invalid data entered" << endl;
       return;
@@ -132,7 +137,12 @@ void handleRectangleOption(ColorImageClass &image)
 
     cout << "Enter lower right corner row and column: ";
     int row2, col2;
-    if (!getIntInput(row2) || !getIntInput(col2))
+    if (!getIntInput(row2))
+    {
+      cout << "Invalid data entered" << endl;
+      return;
+    }
+    if (!getIntInput(col2))
     {
       cout << "Invalid data entered" << endl;
       return;
@@ -159,7 +169,12 @@ void handleRectangleOption(ColorImageClass &image)
   {
     cout << "Enter upper left corner row and column: ";
     int row, col;
-    if (!getIntInput(row) || !getIntInput(col))
+    if (!getIntInput(row))
+    {
+      cout << "Invalid data entered" << endl;
+      return;
+    }
+    if (!getIntInput(col))
     {
       cout << "Invalid data entered" << endl;
       return;
@@ -202,7 +217,12 @@ void handleRectangleOption(ColorImageClass &image)
   {
     cout << "Enter rectangle center row and column: ";
     int row, col;
-    if (!getIntInput(row) || !getIntInput(col))
+    if (!getIntInput(row))
+    {
+      cout << "Invalid data entered" << endl;
+      return;
+    }
+    if (!getIntInput(col))
     {
       cout << "Invalid data entered" << endl;
       return;
@@ -258,7 +278,12 @@ void handlePatternOption(ColorImageClass &image)
   RowColumnClass upperLeft;
   cout << "Enter upper left corner of pattern row and column: ";
   int row, col;
-  if (!getIntInput(row) || !getIntInput(col))
+  if (!getIntInput(row))
+  {
+    cout << "Invalid data entered" << endl;
+    return;
+  }
+  if (!getIntInput(col))
   {
     cout << "Invalid data entered" << endl;
     return;
@@ -290,7 +315,12 @@ void handleInsertOption(ColorImageClass &image)
   RowColumnClass upperLeft;
   cout << "Enter upper left corner to insert image row and column: ";
   int row, col;
-  if (!getIntInput(row) || !getIntInput(col))
+  if (!getIntInput(row))
+  {
+    cout << "Invalid data entered" << endl;
+    return;
+  }
+  if (!getIntInput(col))
   {
     cout << "Invalid data entered" << endl;
     return;
