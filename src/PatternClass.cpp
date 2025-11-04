@@ -9,6 +9,7 @@
  */
 
 #include "PatternClass.h"
+#include "Constants.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -103,7 +104,7 @@ bool PatternClass::readPatternFromFile(const char *fileName)
   int inRows;
   int inCols;
   patternFile >> inRows;
-  if (patternFile.fail() || inRows <= 0)
+  if (patternFile.fail() || inRows < MIN_IMAGE_DIM)
   {
     patternFile.close();
     cout << "Error: Invalid pattern dimensions in file: " << fileName 
@@ -112,7 +113,7 @@ bool PatternClass::readPatternFromFile(const char *fileName)
   }
 
   patternFile >> inCols;
-  if (patternFile.fail() || inCols <= 0)
+  if (patternFile.fail() || inCols < MIN_IMAGE_DIM)
   {
     patternFile.close();
     cout << "Error: Invalid pattern dimensions in file: " << fileName 

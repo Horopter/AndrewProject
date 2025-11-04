@@ -11,6 +11,7 @@
 #include <iostream>
 #include <cstring>
 #include "ColorImageClass.h"
+#include "Constants.h"
 #include "ColorClass.h"
 #include "RowColumnClass.h"
 #include "RectangleClass.h"
@@ -26,7 +27,7 @@ bool getIntInput(int &value)
   if (cin.fail() || cin.eof())
   {
     cin.clear();
-    cin.ignore(10000, '\n');
+    cin.ignore(INPUT_FLUSH_COUNT, '\n');
     return false;
   }
   return true;
@@ -39,7 +40,7 @@ bool getStringInput(char *str, int maxLength)
   if (cin.fail())
   {
     cin.clear();
-    cin.ignore(10000, '\n');
+    cin.ignore(INPUT_FLUSH_COUNT, '\n');
     return false;
   }
   return true;
@@ -110,7 +111,8 @@ void handleRectangleOption(ColorImageClass &image)
     return;
   }
 
-  if (methodChoice < 1 || methodChoice > 3)
+  if (methodChoice < RECT_SPEC_UL_LR ||
+      methodChoice > RECT_SPEC_CENTER_EXTENT)
   {
     cout << "Invalid menu option!" << endl;
     return;
@@ -169,7 +171,7 @@ void handleRectangleOption(ColorImageClass &image)
       cout << "Invalid data entered" << endl;
       return;
     }
-    fill = (fillChoice == 2);
+    fill = (fillChoice == RECT_FILL_YES);
 
     RectangleClass rectangle(upperLeft, lowerRight, color, fill);
     rectangle.drawOntoImage(image);
@@ -217,7 +219,7 @@ void handleRectangleOption(ColorImageClass &image)
       cout << "Invalid data entered" << endl;
       return;
     }
-    fill = (fillChoice == 2);
+    fill = (fillChoice == RECT_FILL_YES);
 
     RowColumnClass lowerRight(upperLeft.getRow() + numRows - 1,
                               upperLeft.getCol() + numCols - 1);
@@ -267,7 +269,7 @@ void handleRectangleOption(ColorImageClass &image)
       cout << "Invalid data entered" << endl;
       return;
     }
-    fill = (fillChoice == 2);
+    fill = (fillChoice == RECT_FILL_YES);
 
     RowColumnClass upperLeft(center.getRow() - halfRows,
                             center.getCol() - halfCols);
@@ -358,23 +360,23 @@ void handleInsertOption(ColorImageClass &image)
     choice = 1;
   }
 
-  if (choice == 1)
+  if (choice == COLOR_CHOICE_RED)
   {
     transparencyColor.setToRed();
   }
-  else if (choice == 2)
+  else if (choice == COLOR_CHOICE_GREEN)
   {
     transparencyColor.setToGreen();
   }
-  else if (choice == 3)
+  else if (choice == COLOR_CHOICE_BLUE)
   {
     transparencyColor.setToBlue();
   }
-  else if (choice == 4)
+  else if (choice == COLOR_CHOICE_BLACK)
   {
     transparencyColor.setToBlack();
   }
-  else if (choice == 5)
+  else if (choice == COLOR_CHOICE_WHITE)
   {
     transparencyColor.setToWhite();
   }
@@ -417,19 +419,19 @@ int main(int argc, char *argv[])
   if (argc != 2)
   {
     cout << "Usage: " << argv[0] << " <input_ppm_file>" << endl;
-    return 1;
+    return EXIT_BAD_ARG;
   }
 
   ColorImageClass image;
   if (!image.readFromPpmFile(argv[1]))
   {
     cout << "Error: Unable to read input file: " << argv[1] << endl;
-    return 1;
+    return EXIT_FILE_ERROR;
   }
 
   // Main menu loop until user selects Exit or EOF
   int menuChoice = 0;
-  while (menuChoice != 5)
+  while (menuChoice != MENU_CHOICE_EXIT)
   {
     displayMainMenu();
     if (!getIntInput(menuChoice))
@@ -442,23 +444,23 @@ int main(int argc, char *argv[])
       continue;
     }
 
-    if (menuChoice == 1)
+    if (menuChoice == MENU_CHOICE_RECTANGLE)
     {
       handleRectangleOption(image);
     }
-    else if (menuChoice == 2)
+    else if (menuChoice == MENU_CHOICE_PATTERN)
     {
       handlePatternOption(image);
     }
-    else if (menuChoice == 3)
+    else if (menuChoice == MENU_CHOICE_INSERT)
     {
       handleInsertOption(image);
     }
-    else if (menuChoice == 4)
+    else if (menuChoice == MENU_CHOICE_OUTPUT)
     {
       handleWriteOption(image);
     }
-    else if (menuChoice == 5)
+    else if (menuChoice == MENU_CHOICE_EXIT)
     {
       cout << "Thank you for using this program" << endl;
     }
