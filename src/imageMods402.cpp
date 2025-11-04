@@ -21,6 +21,7 @@ const int MAX_FILENAME_LENGTH = 256;
 
 bool getIntInput(int &value)
 {
+  // Read an int; handle fail/EOF and clear bad input
   cin >> value;
   if (cin.fail() || cin.eof())
   {
@@ -33,6 +34,7 @@ bool getIntInput(int &value)
 
 bool getStringInput(char *str, int maxLength)
 {
+  // Read a token string; clear bad input on fail
   cin >> str;
   if (cin.fail())
   {
@@ -45,6 +47,7 @@ bool getStringInput(char *str, int maxLength)
 
 void getColorFromMenu(ColorClass &color)
 {
+  // Show color menu and set color based on user choice
   cout << "1. Red" << endl;
   cout << "2. Green" << endl;
   cout << "3. Blue" << endl;
@@ -77,14 +80,11 @@ void getColorFromMenu(ColorClass &color)
   {
     color.setToWhite();
   }
-  else
-  {
-    color.setToRed();
-  }
 }
 
 void displayMainMenu()
 {
+  // Print the main menu every loop
   cout << "1. Annotate image with rectangle" << endl;
   cout << "2. Annotate image with pattern from file" << endl;
   cout << "3. Insert another image" << endl;
@@ -95,6 +95,7 @@ void displayMainMenu()
 
 void handleRectangleOption(ColorImageClass &image)
 {
+  // Ask how to specify rectangle
   cout << "1. Specify upper left and lower right corners of rectangle"
        << endl;
   cout << "2. Specify upper left corner and dimensions of rectangle"
@@ -127,6 +128,7 @@ void handleRectangleOption(ColorImageClass &image)
 
   if (methodChoice == 1)
   {
+    // Method 1: two corners
     cout << "Enter upper left corner row and column: ";
     int row1, col1;
     if (!getIntInput(row1))
@@ -155,6 +157,7 @@ void handleRectangleOption(ColorImageClass &image)
     }
     lowerRight.setRowCol(row2, col2);
 
+    // Choose color and fill option
     getColorFromMenu(color);
 
     cout << "1. No" << endl;
@@ -173,6 +176,7 @@ void handleRectangleOption(ColorImageClass &image)
   }
   else if (methodChoice == 2)
   {
+    // Method 2: corner + dimensions
     cout << "Enter upper left corner row and column: ";
     int row, col;
     if (!getIntInput(row))
@@ -201,6 +205,7 @@ void handleRectangleOption(ColorImageClass &image)
       return;
     }
 
+    // Choose color and fill option
     getColorFromMenu(color);
 
     cout << "1. No" << endl;
@@ -221,6 +226,7 @@ void handleRectangleOption(ColorImageClass &image)
   }
   else if (methodChoice == 3)
   {
+    // Method 3: center + extents
     cout << "Enter rectangle center row and column: ";
     int row, col;
     if (!getIntInput(row))
@@ -249,6 +255,7 @@ void handleRectangleOption(ColorImageClass &image)
       return;
     }
 
+    // Choose color and fill option
     getColorFromMenu(color);
 
     cout << "1. No" << endl;
@@ -273,6 +280,7 @@ void handleRectangleOption(ColorImageClass &image)
 
 void handlePatternOption(ColorImageClass &image)
 {
+  // Read pattern file name
   char patternFileName[MAX_FILENAME_LENGTH];
   cout << "Enter string for file name containing pattern: ";
   if (!getStringInput(patternFileName, MAX_FILENAME_LENGTH))
@@ -281,6 +289,7 @@ void handlePatternOption(ColorImageClass &image)
     return;
   }
 
+  // Read placement and color
   RowColumnClass upperLeft;
   cout << "Enter upper left corner of pattern row and column: ";
   int row, col;
@@ -310,6 +319,7 @@ void handlePatternOption(ColorImageClass &image)
 
 void handleInsertOption(ColorImageClass &image)
 {
+  // Read source image file name
   char insertFileName[MAX_FILENAME_LENGTH];
   cout << "Enter string for file name of PPM image to insert: ";
   if (!getStringInput(insertFileName, MAX_FILENAME_LENGTH))
@@ -318,6 +328,7 @@ void handleInsertOption(ColorImageClass &image)
     return;
   }
 
+  // Read placement
   RowColumnClass upperLeft;
   cout << "Enter upper left corner to insert image row and column: ";
   int row, col;
@@ -333,6 +344,7 @@ void handleInsertOption(ColorImageClass &image)
   }
   upperLeft.setRowCol(row, col);
 
+  // Pick transparency color for overlay
   ColorClass transparencyColor;
   cout << "1. Red" << endl;
   cout << "2. Green" << endl;
@@ -384,6 +396,7 @@ void handleInsertOption(ColorImageClass &image)
 
 void handleWriteOption(ColorImageClass &image)
 {
+  // Ask for output file and write the image
   char outputFileName[MAX_FILENAME_LENGTH];
   cout << "Enter string for PPM file name to output: ";
   if (!getStringInput(outputFileName, MAX_FILENAME_LENGTH))
@@ -400,6 +413,7 @@ void handleWriteOption(ColorImageClass &image)
 
 int main(int argc, char *argv[])
 {
+  // Expect exactly one input file argument
   if (argc != 2)
   {
     cout << "Usage: " << argv[0] << " <input_ppm_file>" << endl;
@@ -413,6 +427,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
+  // Main menu loop until user selects Exit or EOF
   int menuChoice = 0;
   while (menuChoice != 5)
   {

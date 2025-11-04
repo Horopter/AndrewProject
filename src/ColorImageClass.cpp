@@ -159,9 +159,11 @@ bool ColorImageClass::isValidLocation(int row, int col) const
 
 bool ColorImageClass::readFromPpmFile(const char *fileName)
 {
+  // Open the PPM file for reading (ASCII P3 format)
   ifstream inFile;
   inFile.open(fileName);
 
+  // Fail if file cannot be opened
   if (inFile.fail())
   {
     inFile.close();
@@ -169,6 +171,7 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
     return false;
   }
 
+  // Read and validate the PPM magic number
   string magicNumber;
   inFile >> magicNumber;
   if (magicNumber != "P3")
@@ -181,6 +184,7 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
 
   int inWidth, inHeight, inMaxColorValue;
   inFile >> inWidth >> inHeight >> inMaxColorValue;
+  // Validate width, height, and max color value
   if (inFile.fail() || inWidth <= 0 || inHeight <= 0 || 
       inMaxColorValue <= 0)
   {
@@ -190,6 +194,7 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
     return false;
   }
 
+  // Resize this image to match the input
   deallocatePixels();
   width = inWidth;
   height = inHeight;
@@ -200,8 +205,10 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
   {
     for (int j = 0; j < width; j++)
     {
+      // Read one pixel (R G B)
       int red, green, blue;
       inFile >> red >> green >> blue;
+      // Validate that components are within allowed range
       if (inFile.fail() || red < 0 || red > maxColorValue ||
           green < 0 || green > maxColorValue ||
           blue < 0 || blue > maxColorValue)
@@ -221,9 +228,11 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
 
 bool ColorImageClass::writeToPpmFile(const char *fileName) const
 {
+  // Open the output file (ASCII P3 format)
   ofstream outFile;
   outFile.open(fileName);
 
+  // Fail if file cannot be created
   if (outFile.fail())
   {
     outFile.close();
@@ -231,11 +240,13 @@ bool ColorImageClass::writeToPpmFile(const char *fileName) const
     return false;
   }
 
+  // Write header: magic, size, and max color
   const char PPM_MAGIC_NUMBER[] = "P3";
   outFile << PPM_MAGIC_NUMBER << endl;
   outFile << width << " " << height << endl;
   outFile << maxColorValue << endl;
 
+  // Write pixel data row by row
   for (int i = 0; i < height; i++)
   {
     for (int j = 0; j < width; j++)

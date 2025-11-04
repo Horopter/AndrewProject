@@ -55,6 +55,7 @@ PatternClass& PatternClass::operator=(const PatternClass &rhs)
 
 void PatternClass::allocatePatternData(int inRows, int inCols)
 {
+  // Allocate a 2D array for the pattern
   if (inRows <= 0 || inCols <= 0)
   {
     patternData = 0;
@@ -72,6 +73,7 @@ void PatternClass::allocatePatternData(int inRows, int inCols)
 
 void PatternClass::deallocatePatternData()
 {
+  // Free the 2D pattern array if allocated
   if (patternData != 0)
   {
     for (int i = 0; i < patternRows; i++)
@@ -87,6 +89,7 @@ void PatternClass::deallocatePatternData()
 
 bool PatternClass::readPatternFromFile(const char *fileName)
 {
+  // Open the pattern file and read rows, cols, then values
   ifstream patternFile;
   patternFile.open(fileName);
 
@@ -147,6 +150,7 @@ bool PatternClass::drawOntoImage(
     const RowColumnClass &upperLeft,
     const ColorClass &color) const
 {
+  // Draw pattern cells with 1 onto the image using the given color
   if (patternData == 0)
   {
     return false;

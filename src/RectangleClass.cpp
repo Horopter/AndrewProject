@@ -37,6 +37,7 @@ RectangleClass::RectangleClass(
 
 void RectangleClass::normalizeCoordinates()
 {
+  // Ensure start <= end for both row and column
   if (startRow > endRow)
   {
     int temp = startRow;
@@ -100,6 +101,7 @@ void RectangleClass::setFill(bool inFill)
 
 bool RectangleClass::drawOntoImage(ColorImageClass &image) const
 {
+  // Draw each pixel within the rectangle bounds
   for (int i = startRow; i <= endRow; i++)
   {
     for (int j = startCol; j <= endCol; j++)
@@ -108,10 +110,12 @@ bool RectangleClass::drawOntoImage(ColorImageClass &image) const
       {
         if (fill)
         {
+          // Filled: color every pixel
           image.setPixel(i, j, color);
         }
         else
         {
+          // Outline: color only border pixels
           if (i == startRow || i == endRow || j == startCol || j == endCol)
           {
             image.setPixel(i, j, color);
