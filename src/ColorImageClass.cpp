@@ -169,11 +169,9 @@ bool ColorImageClass::readFromPpmFile(const char *fileName)
     return false;
   }
 
-  const int MAX_LINE_LENGTH = 80;
-  const char PPM_MAGIC_NUMBER[] = "P3";
-  char magicNumber[MAX_LINE_LENGTH];
+  string magicNumber;
   inFile >> magicNumber;
-  if (strcmp(magicNumber, PPM_MAGIC_NUMBER) != 0)
+  if (magicNumber != "P3")
   {
     inFile.close();
     cout << "Error: Invalid PPM magic number in file: " << fileName 
