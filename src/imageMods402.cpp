@@ -109,6 +109,12 @@ void handleRectangleOption(ColorImageClass &image)
     return;
   }
 
+  if (methodChoice < 1 || methodChoice > 3)
+  {
+    cout << "Invalid menu option!" << endl;
+    return;
+  }
+
   RowColumnClass upperLeft;
   RowColumnClass lowerRight;
   RowColumnClass center;
