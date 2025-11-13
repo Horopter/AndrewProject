@@ -4,48 +4,30 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++98
 
-# Build directory
-BUILD_DIR = ../build
-
 # Executable name
-EXEC = $(BUILD_DIR)/imageMods402.exe
+EXEC = imageMods402.exe
 
-# Object files
-OBJS = $(BUILD_DIR)/ColorClass.o \
-       $(BUILD_DIR)/RowColumnClass.o \
-       $(BUILD_DIR)/ColorImageClass.o \
-       $(BUILD_DIR)/RectangleClass.o \
-       $(BUILD_DIR)/PatternClass.o \
-       $(BUILD_DIR)/imageMods402.o
+# Source files
+SOURCES = ColorClass.cpp \
+          RowColumnClass.cpp \
+          ColorImageClass.cpp \
+          RectangleClass.cpp \
+          PatternClass.cpp \
+          imageMods402.cpp
 
-# Default target
-$(EXEC): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXEC) $(OBJS)
+# Header files
+HEADERS = ColorClass.h \
+          RowColumnClass.h \
+          ColorImageClass.h \
+          RectangleClass.h \
+          PatternClass.h \
+          Constants.h
 
-# Individual object file dependencies
-$(BUILD_DIR)/ColorClass.o: ColorClass.cpp ColorClass.h
-	$(CXX) $(CXXFLAGS) -c ColorClass.cpp -o $(BUILD_DIR)/ColorClass.o
-
-$(BUILD_DIR)/RowColumnClass.o: RowColumnClass.cpp RowColumnClass.h
-	$(CXX) $(CXXFLAGS) -c RowColumnClass.cpp -o $(BUILD_DIR)/RowColumnClass.o
-
-$(BUILD_DIR)/ColorImageClass.o: ColorImageClass.cpp ColorImageClass.h \
-                ColorClass.h RowColumnClass.h
-	$(CXX) $(CXXFLAGS) -c ColorImageClass.cpp -o $(BUILD_DIR)/ColorImageClass.o
-
-$(BUILD_DIR)/RectangleClass.o: RectangleClass.cpp RectangleClass.h \
-                ColorImageClass.h ColorClass.h RowColumnClass.h
-	$(CXX) $(CXXFLAGS) -c RectangleClass.cpp -o $(BUILD_DIR)/RectangleClass.o
-
-$(BUILD_DIR)/PatternClass.o: PatternClass.cpp PatternClass.h \
-                ColorImageClass.h ColorClass.h RowColumnClass.h
-	$(CXX) $(CXXFLAGS) -c PatternClass.cpp -o $(BUILD_DIR)/PatternClass.o
-
-$(BUILD_DIR)/imageMods402.o: imageMods402.cpp ColorImageClass.h ColorClass.h \
-                RowColumnClass.h RectangleClass.h PatternClass.h
-	$(CXX) $(CXXFLAGS) -c imageMods402.cpp -o $(BUILD_DIR)/imageMods402.o
+# Default target - compile all sources directly into executable
+$(EXEC): $(SOURCES) $(HEADERS)
+	$(CXX) $(CXXFLAGS) -o $(EXEC) $(SOURCES)
 
 # Clean target
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(EXEC)
 

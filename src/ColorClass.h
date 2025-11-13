@@ -12,6 +12,7 @@
 #define COLORCLASS_H
 
 #include "Constants.h"
+#include <fstream>
 
 class ColorClass
 {
@@ -53,6 +54,12 @@ class ColorClass
 
     // Get the blue component of the color
     int getBlue() const;
+
+    // Read RGB values from a file stream
+    bool readFromFile(std::ifstream &inFile, int maxColorValue);
+
+    // Write RGB values to a file stream
+    bool writeToFile(std::ofstream &outFile) const;
 };
 
 #endif

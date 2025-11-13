@@ -102,23 +102,24 @@ void RectangleClass::setFill(bool inFill)
 bool RectangleClass::drawOntoImage(ColorImageClass &image) const
 {
   // Draw each pixel within the rectangle bounds
-  for (int i = startRow; i <= endRow; i++)
+  for (int row = startRow; row <= endRow; row++)
   {
-    for (int j = startCol; j <= endCol; j++)
+    for (int col = startCol; col <= endCol; col++)
     {
-      if (image.isValidLocation(i, j))
+      if (image.isValidLocation(row, col))
       {
         if (fill)
         {
           // Filled: color every pixel
-          image.setPixel(i, j, color);
+          image.setPixel(row, col, color);
         }
         else
         {
           // Outline: color only border pixels
-          if (i == startRow || i == endRow || j == startCol || j == endCol)
+          if (row == startRow || row == endRow || 
+              col == startCol || col == endCol)
           {
-            image.setPixel(i, j, color);
+            image.setPixel(row, col, color);
           }
         }
       }

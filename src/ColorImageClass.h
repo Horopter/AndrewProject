@@ -13,6 +13,7 @@
 
 #include "ColorClass.h"
 #include "RowColumnClass.h"
+#include <string>
 
 class ColorImageClass
 {
@@ -62,10 +63,10 @@ class ColorImageClass
     bool isValidLocation(int row, int col) const;
 
     // Read image from PPM file
-    bool readFromPpmFile(const char *fileName);
+    bool readFromPpmFile(const std::string &fileName);
 
     // Write image to PPM file
-    bool writeToPpmFile(const char *fileName) const;
+    bool writeToPpmFile(const std::string &fileName) const;
 
     // Insert another image with transparency
     bool insertImage(

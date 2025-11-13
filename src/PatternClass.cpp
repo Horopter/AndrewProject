@@ -42,11 +42,12 @@ PatternClass& PatternClass::operator=(const PatternClass &rhs)
     if (rhs.patternData != 0)
     {
       allocatePatternData(rhs.patternRows, rhs.patternCols);
-      for (int i = 0; i < patternRows; i++)
+      for (int rowIndex = 0; rowIndex < patternRows; rowIndex++)
       {
-        for (int j = 0; j < patternCols; j++)
+        for (int colIndex = 0; colIndex < patternCols; colIndex++)
         {
-          patternData[i][j] = rhs.patternData[i][j];
+          patternData[rowIndex][colIndex] = 
+            rhs.patternData[rowIndex][colIndex];
         }
       }
     }
@@ -57,7 +58,7 @@ PatternClass& PatternClass::operator=(const PatternClass &rhs)
 void PatternClass::allocatePatternData(int inRows, int inCols)
 {
   // Allocate a 2D array for the pattern
-  if (inRows <= 0 || inCols <= 0)
+  if (inRows < MIN_IMAGE_DIM || inCols < MIN_IMAGE_DIM)
   {
     patternData = 0;
     return;
@@ -66,9 +67,9 @@ void PatternClass::allocatePatternData(int inRows, int inCols)
   patternRows = inRows;
   patternCols = inCols;
   patternData = new int*[patternRows];
-  for (int i = 0; i < patternRows; i++)
+  for (int rowIndex = 0; rowIndex < patternRows; rowIndex++)
   {
-    patternData[i] = new int[patternCols];
+    patternData[rowIndex] = new int[patternCols];
   }
 }
 
@@ -77,9 +78,9 @@ void PatternClass::deallocatePatternData()
   // Free the 2D pattern array if allocated
   if (patternData != 0)
   {
-    for (int i = 0; i < patternRows; i++)
+    for (int rowIndex = 0; rowIndex < patternRows; rowIndex++)
     {
-      delete[] patternData[i];
+      delete[] patternData[rowIndex];
     }
     delete[] patternData;
     patternData = 0;
@@ -97,27 +98,27 @@ bool PatternClass::readPatternFromFile(const char *fileName)
   if (patternFile.fail())
   {
     patternFile.close();
-    cout << "Error: Unable to open pattern file: " << fileName << endl;
+    cout << ERROR_UNABLE_TO_OPEN_PATTERN << fileName << endl;
     return false;
   }
 
   int inRows;
   int inCols;
   patternFile >> inRows;
-  if (patternFile.fail() || inRows < MIN_IMAGE_DIM)
+  if (patternFile.fail() || inRows < MIN_IMAGE_DIM || 
+      inRows > MAX_IMAGE_DIM)
   {
     patternFile.close();
-    cout << "Error: Invalid pattern dimensions in file: " << fileName 
-         << endl;
+    cout << ERROR_INVALID_PATTERN_DIMENSIONS << fileName << endl;
     return false;
   }
 
   patternFile >> inCols;
-  if (patternFile.fail() || inCols < MIN_IMAGE_DIM)
+  if (patternFile.fail() || inCols < MIN_IMAGE_DIM || 
+      inCols > MAX_IMAGE_DIM)
   {
     patternFile.close();
-    cout << "Error: Invalid pattern dimensions in file: " << fileName 
-         << endl;
+    cout << ERROR_INVALID_PATTERN_DIMENSIONS << fileName << endl;
     return false;
   }
 
@@ -125,21 +126,31 @@ bool PatternClass::readPatternFromFile(const char *fileName)
   allocatePatternData(inRows, inCols);
 
   int patternValue;
-  for (int i = 0; i < patternRows; i++)
+  for (int rowIndex = 0; rowIndex < patternRows; rowIndex++)
   {
-    for (int j = 0; j < patternCols; j++)
+    for (int colIndex = 0; colIndex < patternCols; colIndex++)
     {
       patternFile >> patternValue;
       if (patternFile.fail())
       {
         patternFile.close();
         deallocatePatternData();
-        cout << "Error: Invalid pattern data in file: " << fileName 
-             << endl;
+        cout << ERROR_INVALID_PATTERN_DATA << fileName << endl;
         return false;
       }
-      patternData[i][j] = patternValue;
+      patternData[rowIndex][colIndex] = patternValue;
     }
+  }
+
+  // Check for extra data after reading all expected pattern values
+  int extraValue;
+  patternFile >> extraValue;
+  if (!patternFile.fail() && !patternFile.eof())
+  {
+    patternFile.close();
+    deallocatePatternData();
+    cout << ERROR_INVALID_PATTERN_DATA << fileName << endl;
+    return false;
   }
 
   patternFile.close();
@@ -160,14 +171,16 @@ bool PatternClass::drawOntoImage(
   int startRow = upperLeft.getRow();
   int startCol = upperLeft.getCol();
 
-  for (int i = 0; i < patternRows; i++)
+  for (int patternRowIndex = 0; patternRowIndex < patternRows; 
+       patternRowIndex++)
   {
-    for (int j = 0; j < patternCols; j++)
+    for (int patternColIndex = 0; patternColIndex < patternCols; 
+         patternColIndex++)
     {
-      if (patternData[i][j] == 1)
+      if (patternData[patternRowIndex][patternColIndex] == 1)
       {
-        int imageRow = startRow + i;
-        int imageCol = startCol + j;
+        int imageRow = startRow + patternRowIndex;
+        int imageCol = startCol + patternColIndex;
         if (image.isValidLocation(imageRow, imageCol))
         {
           image.setPixel(imageRow, imageCol, color);

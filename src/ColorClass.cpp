@@ -8,6 +8,9 @@
  */
 
 #include "ColorClass.h"
+#include <fstream>
+#include <iostream>
+using namespace std;
 
 // Uses MIN_COLOR_VALUE and MAX_COLOR_VALUE from Constants.h
 
@@ -150,5 +153,29 @@ int ColorClass::getGreen() const
 int ColorClass::getBlue() const
 {
   return blueValue;
+}
+
+bool ColorClass::readFromFile(ifstream &inFile, int maxColorValue)
+{
+  int red, green, blue;
+  inFile >> red >> green >> blue;
+  
+  // Validate that components are within allowed range
+  if (inFile.fail() || red < MIN_COLOR_VALUE || red > maxColorValue ||
+      green < MIN_COLOR_VALUE || green > maxColorValue ||
+      blue < MIN_COLOR_VALUE || blue > maxColorValue)
+  {
+    return false;
+  }
+  
+  // Set the color values (clamping will be handled by setToSpecificColor)
+  setToSpecificColor(red, green, blue);
+  return true;
+}
+
+bool ColorClass::writeToFile(ofstream &outFile) const
+{
+  outFile << redValue << " " << greenValue << " " << blueValue << " ";
+  return !outFile.fail();
 }
 
